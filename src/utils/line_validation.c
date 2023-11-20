@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   file_parsing.c                                     :+:      :+:    :+:   */
+/*   line_validation.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: meskelin <meskelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/24 11:48:45 by meskelin          #+#    #+#             */
-/*   Updated: 2023/11/07 11:00:27 by meskelin         ###   ########.fr       */
+/*   Created: 2023/11/07 15:12:50 by meskelin          #+#    #+#             */
+/*   Updated: 2023/11/14 11:12:51 by meskelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/cubed.h"
 
-void	validate_parse_input(int fd, t_info **info)
+int	validate_line(char *line, char *validate)
 {
-	char		*line;
+	char	*temp;
 
-	line = NULL;
-	line = parse_textures(fd, info);
-	parse_map(fd, info, line);
-	parse_player(&(*info)->player);
+	temp = ft_strtrim(line, validate);
+	if (ft_strlen(temp) > 0)
+	{
+		free(temp);
+		free(line);
+		ft_put_error_exit("Invalid input file");
+		return (0);
+	}
+	free(temp);
+	return (1);
 }

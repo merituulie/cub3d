@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cubed.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meskelin <meskelin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emeinert <emeinert@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 11:43:24 by meskelin          #+#    #+#             */
-/*   Updated: 2023/10/24 13:18:50 by meskelin         ###   ########.fr       */
+/*   Updated: 2023/11/13 11:40:26 by emeinert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "../libft/libft.h"
 # include "lst.h"
-# include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
@@ -159,7 +158,11 @@ void		run_program(char **argv);
 // MATH
 double		ft_dtorad(double angle);
 double		ft_angle(double angle);
-int			ft_rgbtocolor(t_color rgb);
+long		ft_rgbtocolor(t_color rgb);
+void		calculate_colors(char **input);
+void		ft_parse_color(t_color *color, int *colour);
+char		*add_color_string(char **line);
+char		**prepare_string(char *line, int start);
 
 //INPUT
 char		*parse_textures(int fd, t_info **texture);
@@ -176,6 +179,7 @@ void		validate_texture_count(int counter);
 int			valid_char(char ch);
 void		validate_map(t_node **map, t_info **texture);
 void		flood_fill(t_info **texture, int y, int x);
+int			validate_line(char *line, char *validate);
 
 // DRAW
 void		draw_minimap(t_info **info);
@@ -220,6 +224,6 @@ void		rot_player(int sign, t_info **info);
 // EXIT
 int			on_destroy(t_info **info);
 void		exit_failure(void);
-void		exit_success(t_mlx **mlx);
+void		exit_success(t_info **info);
 
 #endif

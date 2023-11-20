@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_parsing.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meskelin <meskelin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emeinert <emeinert@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 11:49:01 by meskelin          #+#    #+#             */
-/*   Updated: 2023/10/24 12:12:09 by meskelin         ###   ########.fr       */
+/*   Updated: 2023/11/13 11:40:46 by emeinert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,9 @@ static void	validate_parse_range(char *line, t_color *color, int start)
 	char	**numbers;
 	int		i;
 	int		colour[3];
-	char	*input;
 
-	input = ft_substr(line, start, ft_strlen(line) - start);
-	input = ft_strtrim(input, "\n\t FC");
-	numbers = ft_split(input, ',');
+	numbers = prepare_string(line, start);
+	calculate_colors(numbers);
 	i = 0;
 	while (numbers[i] && i < 3)
 	{
@@ -30,14 +28,12 @@ static void	validate_parse_range(char *line, t_color *color, int start)
 			break ;
 		i++;
 	}
-	free(input);
+	if (numbers[i])
+		ft_put_error_exit("Invalid color input");
 	free_char_array(numbers);
 	if (i != 3)
-		ft_put_error_exit("Wrong color");
-	color->r = colour[0];
-	color->g = colour[1];
-	color->b = colour[2];
-	color->draw_color = ft_rgbtocolor(*color);
+		ft_put_error_exit("Invalid color input");
+	ft_parse_color(color, colour);
 }
 
 static int	parse_floor_ceiling(char **input, char *line, t_info **info)
@@ -93,16 +89,27 @@ static int	validate_texture(char *line, t_info **info)
 	char	**input;
 
 	input = ft_split(line, 32);
-	if (!texture_comparison(input, info))
+	if (!ft_strncmp_all(input[0], "NO")
+		|| !ft_strncmp_all(input[0], "SO")
+		|| !ft_strncmp_all(input[0], "EA")
+		|| !ft_strncmp_all(input[0], "WE")
+		|| !ft_strncmp_all(input[0], "F")
+		|| !ft_strncmp_all(input[0], "C")
+		|| validate_line(input[0], "\n\t "))
 	{
-		if (!parse_floor_ceiling(input, line, info))
+		if (!texture_comparison(input, info))
 		{
-			free_char_array(input);
-			return (0);
+			if (!parse_floor_ceiling(input, line, info))
+			{
+				free_char_array(input);
+				return (0);
+			}
 		}
+		free_char_array(input);
+		return (1);
 	}
-	free_char_array(input);
-	return (1);
+	ft_put_error_exit("Invalid texture");
+	return (0);
 }
 
 char	*parse_textures(int fd, t_info **info)
@@ -120,6 +127,7 @@ char	*parse_textures(int fd, t_info **info)
 		{
 			if (line[0] != '\n')
 			{
+				validate_line(line, "\n\t 1NSEW");
 				parse_matrices(info);
 				return (line);
 			}

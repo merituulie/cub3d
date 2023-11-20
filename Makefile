@@ -40,11 +40,13 @@ SRC_LL =	ft_lstsize \
 			ft_lstiterate \
 			ft_lstlast \
 			ft_lstnew \
+			ft_lstfree \
 			ft_lstadd_back
 
 SRC_UTLS =	file \
 			hook \
 			move \
+			line_validation \
 			exit
 
 SRC_VLD =	map_validation \
@@ -113,3 +115,6 @@ fclean: clean
 
 .PHONY: re
 re: fclean all
+
+.PHONY: bonus
+bonus:

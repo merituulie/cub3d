@@ -6,16 +6,25 @@
 /*   By: meskelin <meskelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 11:50:02 by meskelin          #+#    #+#             */
-/*   Updated: 2023/10/24 11:56:22 by meskelin         ###   ########.fr       */
+/*   Updated: 2023/11/07 17:03:24 by meskelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/cubed.h"
 
-void	exit_success(t_mlx **mlx)
+static void	free_mlx(t_info **info)
 {
-	if (mlx)
-		mlx_destroy_window((*mlx)->mlx, (*mlx)->window);
+	mlx_destroy_image((*info)->mlx->mlx, (*info)->mlx->img->img);
+	mlx_destroy_image((*info)->mlx->mlx, (*info)->no->img);
+	mlx_destroy_image((*info)->mlx->mlx, (*info)->so->img);
+	mlx_destroy_image((*info)->mlx->mlx, (*info)->ea->img);
+	mlx_destroy_image((*info)->mlx->mlx, (*info)->we->img);
+	mlx_destroy_window((*info)->mlx->mlx, (*info)->mlx->window);
+}
+
+void	exit_success(t_info **info)
+{
+	free_mlx(info);
 	exit(0);
 }
 

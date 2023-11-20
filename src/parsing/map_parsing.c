@@ -6,7 +6,7 @@
 /*   By: meskelin <meskelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 11:48:49 by meskelin          #+#    #+#             */
-/*   Updated: 2023/10/24 12:14:12 by meskelin         ###   ########.fr       */
+/*   Updated: 2023/11/07 11:01:13 by meskelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	parse_map(int fd, t_info **info, char *line)
 	if (line)
 	{
 		parse_row(line, &map, info);
+		free(line);
 		parse_nodes(fd, &map, info, 1);
 	}
 	else
@@ -102,4 +103,5 @@ void	parse_map(int fd, t_info **info, char *line)
 		ft_put_error_exit("Missing player");
 	parse_array(info, &map);
 	validate_map(&map, info);
+	ft_lstfree(&map);
 }
